@@ -73,15 +73,24 @@
            switch(e.which) {
                case 37: // left
                    currentTime -= 2;
+                   video.currentTime = currentTime;
                    break;
-
+               case 187: //= or numpad +
+               case 107:
+                   video.volume += 0.05
+                   break;
                case 39: // right
                    currentTime += 2;
+                   video.currentTime = currentTime;
+                   break;
+               case 189:
+               case 109://- or numpad -
+                   video.volume -= 0.05
                    break;
 
                default: return; // exit this handler for other keys
            }
-           video.currentTime = currentTime;
+           
        });
    }
 
