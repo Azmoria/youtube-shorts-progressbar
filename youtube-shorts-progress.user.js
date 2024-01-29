@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube shorts progress bar
 // @namespace    https://github.com/Azmoria/youtube-shorts-progressbar/
-// @version      0.3
+// @version      0.4
 // @description  adds the ability to scan through youtube shorts on pc
 // @author       Azmoria
 // @match        https://youtube.com/*
@@ -27,6 +27,10 @@
         text-shadow: 1px 1px #000;
         text-transform: capitalize;
     }
+    #progress-bar-line:hover,
+    #progress-bar-line:hover div{
+       height: 5px;
+    }
     </style>`
     $('#youtube-shorts-progress').remove();
     $('html').append(cssStyles);
@@ -38,7 +42,7 @@
             for (let i = 0; i < mutation.addedNodes.length; i++) {
                 // do things to your newly added nodes here
                 let node = mutation.addedNodes[i]
-                if ( $('[role="progressbar"]').length>0){
+                if ( $('#player video.video-stream').length>0){
                    addProgressClick()
                 }
             }
@@ -53,33 +57,34 @@
     })
 
    function addProgressClick(){
-    $('[role="progressbar"]').off('click.progress').on('click.progress', function(e){
-        let video = $(this).parents('#player-container').find('#player video.video-stream')[0];
-        let duration = video.duration;
-        let x = e.pageX - $(this).offset().left
-        let clickedValue = x / this.offsetWidth;
-        let currentTime = duration * clickedValue;
-        video.currentTime = currentTime;
-    })
-
-   $('body').off('keydown.progress').on('keydown.progress', function(e){
-        let video = $('#player video.video-stream')[0];
-       let currentTime = video.currentTime;
-       switch(e.which) {
-           case 37: // left
-               currentTime -= 2;
-               break;
-
-           case 39: // right
-               currentTime += 2;
-               break;
-
-           default: return; // exit this handler for other keys
-       }
-      video.currentTime = currentTime;
-   })
 
 
+       $('[role="progressbar"]').off('click.progress').on('click.progress', function(e){
+           let video = $(this).parents('#player-container').find('#player video.video-stream[loop]')[0];
+           let duration = video.duration;
+           let x = e.pageX - $(this).offset().left
+           let clickedValue = x / this.offsetWidth;
+           let currentTime = duration * clickedValue;
+           video.currentTime = currentTime;
+       });
+       $('html').off('keydown.progress').on('keydown.progress', function(e){
+           let video = $('#player video.video-stream[loop]')[0];
+           let currentTime = video.currentTime;
+           switch(e.which) {
+               case 37: // left
+                   currentTime -= 2;
+                   break;
+
+               case 39: // right
+                   currentTime += 2;
+                   break;
+
+               default: return; // exit this handler for other keys
+           }
+           video.currentTime = currentTime;
+       });
    }
+
+
 
 })();
