@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube shorts progress bar
 // @namespace    https://github.com/Azmoria/youtube-shorts-progressbar/
-// @version      0.4
+// @version      0.5
 // @description  adds the ability to scan through youtube shorts on pc
 // @author       Azmoria
 // @match        https://youtube.com/*
