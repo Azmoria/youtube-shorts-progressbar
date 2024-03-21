@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         youtube shorts progress bar
 // @namespace    https://github.com/Azmoria/youtube-shorts-progressbar/
-// @version      0.6
+// @version      0.7
 // @description  adds the ability to scan through youtube shorts on pc
 // @author       Azmoria
 // @match        https://youtube.com/*
@@ -37,64 +37,42 @@
     $('#youtube-shorts-progress').remove();
     $('html').append(cssStyles);
 
-    let observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (!mutation.addedNodes) return
-
-            for (let i = 0; i < mutation.addedNodes.length; i++) {
-                // do things to your newly added nodes here
-                let node = mutation.addedNodes[i]
-                if ( $('#player video.video-stream').length>0){
-                   addProgressClick()
-                }
-            }
-        })
-    })
-
-    observer.observe(document.body, {
-        childList: true
-        , subtree: true
-        , attributes: false
-        , characterData: false
-    })
-
-   function addProgressClick(){
+  
 
 
-       $('[role="progressbar"]').off('click.progress').on('click.progress', function(e){
-           let video = $(this).parents('#player-container').find('#player video.video-stream[loop]')[0];
-           let duration = video.duration;
-           let x = e.pageX - $(this).offset().left
-           let clickedValue = x / this.offsetWidth;
-           let currentTime = duration * clickedValue;
-           video.currentTime = currentTime;
-       });
-       $('html').off('keydown.progress').on('keydown.progress', function(e){
-           let video = $('#player video.video-stream[loop]')[0];
-           let currentTime = video.currentTime;
-           switch(e.which) {
-               case 37: // left
-                   currentTime -= 2;
-                   video.currentTime = currentTime;
-                   break;
-               case 187: //= or numpad +
-               case 107:
-                   video.volume += 0.05
-                   break;
-               case 39: // right
-                   currentTime += 2;
-                   video.currentTime = currentTime;
-                   break;
-               case 189:
-               case 109://- or numpad -
-                   video.volume -= 0.05
-                   break;
+    $('html').off('click.progress').on('click.progress', '[role="progressbar"]', function(e){
+        let video = $(this).parents('#player-container').find('#player video.video-stream[loop]')[0];
+        let duration = video.duration;
+        let x = e.pageX - $(this).offset().left
+        let clickedValue = x / this.offsetWidth;
+        let currentTime = duration * clickedValue;
+        video.currentTime = currentTime;
+    });
+    $('html').off('keydown.progress').on('keydown.progress', function(e){
+        let video = $('#player video.video-stream[loop]')[0];
+        let currentTime = video.currentTime;
+        switch(e.which) {
+            case 37: // left
+                currentTime -= 2;
+                video.currentTime = currentTime;
+                break;
+            case 187: //= or numpad +
+            case 107:
+                video.volume += 0.05
+                break;
+            case 39: // right
+                currentTime += 2;
+                video.currentTime = currentTime;
+                break;
+            case 189:
+            case 109://- or numpad -
+                video.volume -= 0.05
+                break;
 
-               default: return; // exit this handler for other keys
-           }
-           
-       });
-   }
+            default: return; // exit this handler for other keys
+        }
+    });
+
 
 
 
